@@ -10,6 +10,10 @@ export default function Home() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        if (name === '') {
+            alert('Please enter a name')
+            return
+        }
         try {
             const response = await fetch('/create-user', {
                 method: 'POST',
@@ -28,6 +32,7 @@ export default function Home() {
             window.location = data.joinUrl;
         } catch (error) {
             console.error(error);
+            alert('Failed to join room')
         }
     };
 
