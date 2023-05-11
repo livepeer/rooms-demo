@@ -1,38 +1,26 @@
 "use client";
 
-import {useState} from 'react';
-
 import styles from './page.module.css'
 
 export default function Home() {
-    const [name, setName] = useState('');
-
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (name === '') {
-            alert('Please enter a name')
-            return
-        }
         try {
-            const response = await fetch('/create-user', {
+            const response = await fetch('/create-room', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({
-                    name: name,
-                    roomID: (new URL(window.location)).searchParams.get('room')
-                }),
             });
 
             const data = await response.json();
 
             console.log(data);
-            window.location = data.joinUrl;
+            window.location = '/join?room=' + data.id;
         } catch (error) {
             console.error(error);
-            alert('Failed to join room')
+            alert('Failed to create room')
         }
     };
 
@@ -40,9 +28,7 @@ export default function Home() {
         <main className={styles.main}>
         <div className={styles.description}>
         <form onSubmit={handleSubmit}>
-            <label htmlFor="name">Name:</label>
-            <input type="text" id="name" value={name} onChange={(e) => setName(e.target.value)} />
-            <button type="submit">Join</button>
+            <button type="submit">Create New Room</button>
         </form>
         </div>
         </main>
